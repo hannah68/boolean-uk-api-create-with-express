@@ -2,6 +2,7 @@ const db = require("../../utils/database");
 const { buildAnimalDatabase } = require("../../utils/mockData");
 
 function Pet() {
+  // create table==================================================
   function createTable() {
     const sql = `
       DROP TABLE IF EXISTS pets;
@@ -22,6 +23,47 @@ function Pet() {
       .catch(console.error);
   }
 
+  // get all pets===============================================
+  function getAllPets(res){
+    const getAll = `
+      SELECT * FROM Pets
+    `;
+    return db
+      .query(getAll)
+      .then(result => result.rows)
+      .catch(console.error);
+  }
+
+  
+  // create one pet =============================================
+  function createOnePet(pet){
+    const createOne = `
+      INSERT INTO pets (name, age, type, breed, microchip)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *;
+    `;
+
+    return db
+      .query(createOne, [pet.name, pet.age, pet.type, pet.breed, pet.microchip])
+      .then(result => result.rows[0])
+      .catch(console.error);
+  }
+
+  // create one pet by id======================================
+  function getOneById(id,res){
+    const getOneById = `
+      SELECT *
+      FROM pets
+      WHERE id = $1;
+    `;
+
+    return db
+      .query(getOneById, [id])
+      .then(result => result.rows[0])
+      .catch(console.error);
+  }
+
+  // mock data ==========================================
   function mockData() {
     const createPet = `
       INSERT INTO pets
@@ -37,11 +79,20 @@ function Pet() {
     });
   }
 
-  createTable().then(() => {
-    console.log("\nCreating mock data for Pets...\n");
-
+  
+  function init() {
+    console.log("\nCreating mock data for Pets...\n")
+    createTable();
     mockData();
-  });
+  }
+
+  return {
+    createOnePet,
+    getOneById,
+    getAllPets,
+    init
+  };
+  
 }
 
 module.exports = Pet;
