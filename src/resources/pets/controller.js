@@ -35,4 +35,9 @@ module.exports = {
     createOne,
     getAll,
     getOnePetById
+<<<<<<< HEAD
 };
+=======
+};
+  
+>>>>>>> e9bae51ea7ed9b1a1af666619b57e4597d9beeb8
