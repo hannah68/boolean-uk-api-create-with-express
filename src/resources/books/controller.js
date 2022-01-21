@@ -39,22 +39,39 @@ async function getFictionBooks(req,res){
         const bookTopic = await bookType(topic);
         return res.json({ data: bookTopic });
     }else{
-        const thisBookRes = await bookType("fiction");
-        return res.json({ data: thisBookRes });
+        const fictionRes = await bookType("fiction");
+        return res.json({ data: fictionRes });
     }
 }
 
 // get books by non-fiction type=================
 async function getNonFictionBooks(req,res){
     const bookType = Book().getNonFictionType;
-    
-    
+
+    if(req.query.topic){
+        const topic = req.query.topic;
+        const bookTopic = await bookType(topic);
+        return res.json({data: bookTopic});
+    }else{
+        const nonFicRes = await bookType("non-fiction");
+        return res.json({data: nonFicRes});
+    }
 }
+
+// get author books============================
+async function getAuthorBooks(req,res){
+    const author = req.params.author
+    const order = req.query.order
+    
+
+}
+    
 
 module.exports = {
     createOne,
     getAll,
     getOneBookById,
     getFictionBooks,
-    getNonFictionBooks
+    getNonFictionBooks,
+    getAuthorBooks
 };
