@@ -60,10 +60,9 @@ async function getNonFictionBooks(req,res){
 
 // get author books============================
 async function getAuthorBooks(req,res){
-    const author = req.params.author
-    const order = req.query.order
-    
-
+    const author = req.params.author;
+    const authorBookRes = await Book().getAuthorBook(author);
+    return res.json({data: authorBookRes})
 }
     
 

@@ -30,9 +30,31 @@ async function getOnePetById(req, res){
     return res.json({ data: thisPetRes });
 }
 
+// get pets by all types==============
+async function getPetsType(req,res){
+    const petsTypes = await Pet().getAllPetsType()
+    return res.json({ data: petsTypes });
+}
+
+// get pets by type===================
+async function getPetsbyType(req,res){
+    const type = req.path.slice(1);
+    
+    if(req.query.breed){
+        const breed = req.query.breed;
+        const petsBreed = await Pet().getPetsBreedType(breed, type);
+        return res.json({ data: petsBreed });
+    }else{
+        const petsTypes = await Pet().getPetsType(type);
+        return res.json({ data: petsTypes });
+    }
+    
+}
   
 module.exports = {
     createOne,
     getAll,
-    getOnePetById
+    getOnePetById,
+    getPetsType,
+    getPetsbyType
 };

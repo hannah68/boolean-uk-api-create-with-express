@@ -118,6 +118,19 @@ function Book() {
     }
   }
 
+  // get author books by order==================================
+  function getAuthorBook(author){
+    const authorBook = `
+      SELECT *
+      FROM BOOKS
+      WHERE author = $1
+      ORDER BY publicationDate DESC;
+    `;
+    return db
+      .query(authorBook, [author])
+      .then(result => result.rows)
+      .catch(console.error);
+  }
 
 
   // mock data===================================================
@@ -146,6 +159,7 @@ function Book() {
     getAllBooks,
     getFictionType,
     getNonFictionType,
+    getAuthorBook,
     init
   };
 }

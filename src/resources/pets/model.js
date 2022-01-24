@@ -23,9 +23,9 @@ function Pet() {
   }
 
   // get all pets===============================================
-  function getAllPets(res){
+  function getAllPets(){
     const getAll = `
-      SELECT * FROM Pets
+      SELECT * FROM pets
     `;
     return db
       .query(getAll)
@@ -49,7 +49,7 @@ function Pet() {
   }
 
   // create one pet by id======================================
-  function getOneById(id,res){
+  function getOneById(id){
     const getOneById = `
       SELECT *
       FROM pets
@@ -60,6 +60,41 @@ function Pet() {
       .query(getOneById, [id])
       .then(result => result.rows[0])
       .catch(console.error);
+  }
+
+  // get a list of pet type=============================
+  function getAllPetsType(){
+    const allpetsType = `
+      SELECT DISTINCT type FROM pets
+    `;
+    return db
+      .query(allpetsType)
+      .then(result => result.rows)
+      .catch(console.error);
+  }
+
+  // get pets type=====================================
+  function getPetsType(type){
+    const petsType = `
+      SELECT * FROM pets WHERE type = $1
+    `;
+    return db
+      .query(petsType, [type])
+      .then(result => result.rows)
+      .catch(console.error)
+  }
+
+  // get pets by type and breed===========================
+  function getPetsBreedType(type, breed){
+    const breedType = `
+      SELECT * 
+      FROM pets 
+      WHERE type = $1 AND breed = $2
+    `;
+    return db
+      .query(breedType, [type, breed])
+      .then(result => result.rows)
+      .catch(console.error)
   }
 
   // mock data ==========================================
@@ -89,6 +124,9 @@ function Pet() {
     createOnePet,
     getOneById,
     getAllPets,
+    getAllPetsType,
+    getPetsType,
+    getPetsBreedType,
     init
   };
   
