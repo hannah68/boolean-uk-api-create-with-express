@@ -14,11 +14,18 @@ async function createOne(req, res){
     return res.json({ data: thisPetRes });
 }
 
-// get all Pets======================
+// get all Pets ======================
 async function getAll(req, res){
-    const all = Pet().getAllPets;
-    const thisPetRes = await all(res);
-    return res.json({data: thisPetRes})
+    if(req.query.microchip !== undefined){
+        const microchip = req.query.microchip
+        const thisMicrochip = await Pet().getAllPetsWithoutMicrochip(microchip);
+        return res.json({data: thisMicrochip})
+    }
+    else{
+        const all = Pet().getAllPets;
+        const thisAllPetRes = await all(res);
+        return res.json({data: thisAllPetRes})
+    }
 }
 
 // get a Pet with an id==============
@@ -32,11 +39,11 @@ async function getOnePetById(req, res){
 
 // get pets by all types==============
 async function getPetsType(req,res){
-    const petsTypes = await Pet().getAllPetsType()
+    const petsTypes = await Pet().getAllPetsType(res)
     return res.json({ data: petsTypes });
 }
 
-// get pets by type===================
+// get pets by type, breed and microchip==================
 async function getPetsbyType(req,res){
     const type = req.path.slice(1);
     
@@ -44,7 +51,13 @@ async function getPetsbyType(req,res){
         const breed = req.query.breed;
         const petsBreed = await Pet().getPetsBreedType(breed, type);
         return res.json({ data: petsBreed });
-    }else{
+    }
+    else if(req.query.microchip){
+        const microchip = req.query.microchip;
+        const petsMicrochip = await Pet().getPetsMicrochipType(microchip, type);
+        return res.json({ data: petsMicrochip });
+    }
+    else{
         const petsTypes = await Pet().getPetsType(type);
         return res.json({ data: petsTypes });
     }

@@ -96,6 +96,30 @@ function Pet() {
       .then(result => result.rows)
       .catch(console.error)
   }
+  // get pets by microchip===========================
+  function getAllPetsWithoutMicrochip(microchip){
+    const petsMicrochip = `
+      SELECT * 
+      FROM pets 
+      WHERE microchip = $1
+    `
+    return db
+      .query(petsMicrochip, [microchip])
+      .then(result => result.rows)
+      .catch(console.error)
+  }
+  // get pets by type and microchip===========================
+  function getPetsMicrochipType(microchip, type){
+    const microchipByType = `
+      SELECT * 
+      FROM pets 
+      WHERE microchip = $1 And type = $2
+    `
+    return db
+      .query(microchipByType, [microchip, type])
+      .then(result => result.rows)
+      .catch(console.error)
+  }
 
   // mock data ==========================================
   function mockData() {
@@ -107,7 +131,6 @@ function Pet() {
     `;
 
     const pets = buildAnimalDatabase();
-
     pets.forEach((pet) => {
       db.query(createPet, Object.values(pet));
     });
@@ -127,6 +150,8 @@ function Pet() {
     getAllPetsType,
     getPetsType,
     getPetsBreedType,
+    getAllPetsWithoutMicrochip,
+    getPetsMicrochipType,
     init
   };
   
